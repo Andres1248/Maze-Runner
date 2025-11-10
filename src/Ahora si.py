@@ -35,6 +35,20 @@ jugador_congelado = False
 duracion_congelado = 5
 
 
+conn = sqlite3.connect('scores.db')
+c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS scores (
+            id INTEGER PRIMARY KEY,
+            player TEXT NOT NULL,
+            score INTEGER NOT NULL
+            );''')
+players = [
+            ('Purple', 0),
+            ('Orange', 0)
+            ]
+c.executemany('INSERT INTO scores (player, score) VALUES (?, ?)', players)
+
+
 modo = ''
 while modo.lower()!='automatic' and modo.lower()!='adventure' and modo.lower()!='competition':
     modo = input('Which mode would you like to play (automatic/adventure/competition): ')
@@ -934,7 +948,7 @@ else:
     elif ambiente.lower()=='ice':
         fondo_path = os.path.join(script_dir, "..", "Images", 'K2.jpg')
     else:
-    	fondo_path = os.path.join(script_dir, "..", "Images", 'supernova.jpg')
+        fondo_path = os.path.join(script_dir, "..", "Images", 'supernova.jpg')
 
     fondo = pygame.image.load(fondo_path)
 
@@ -1542,27 +1556,10 @@ else:
 
 
         elif modo.lower()=='competition':
-        
-        	conn = sqlite3.connect('scores.db')
-        	c = conn.cursor()
-        	c.execute('''CREATE TABLE IF NOT EXISTS scores (
-        					id INTEGER PRIMARY KEY,
-        					player TEXT NOT NULL,
-        					score INTEGER NOT NULL
-        					);''')
-        	players = [
-        				('Purple', 0),
-        				('Orange', 0)
-        				]
-        	c.executemany('INSERT INTO scores (player, score) VALUES (?, ?)', players)
-        	
-        	
+            
         
             #Nivel 1
             if nivel1:
-
-
-                
                 for y in range(len(Matriz_competicion_1)):
                     row = Matriz_competicion_1[y]
                     for x in range(len(row)):
@@ -1595,18 +1592,20 @@ else:
                 if 'P' in Matriz_competicion_1[-1]:
                     #puntosP+=1
                     c.execute('''UPDATE scores
-                    				SET score = score + 1
-                    				WHERE player = "Purple";'''
-                    				)
+                                    SET score = score + 1
+                                    WHERE player = "Purple";'''
+                                    )
+                    conn.commit()
                     
                     timestamp = time.time()
                     nivel1=False
                 elif 'Y' in Matriz_competicion_1[-1]:
                     #puntosY+=1
                     c.execute('''UPDATE scores
-                    				SET score = score + 1
-                    				WHERE player = "Orange";'''
-                    				)
+                                    SET score = score + 1
+                                    WHERE player = "Orange";'''
+                                    )
+                    conn.commit()
                     
                     timestamp = time.time()
                     nivel1=False
@@ -1730,17 +1729,19 @@ else:
                 if 'P' in Matriz_competicion_2[-1]:
                     #puntosP+=1
                     c.execute('''UPDATE scores
-                    				SET score = score + 1
-                    				WHERE player = "Purple";'''
-                    				)
+                                    SET score = score + 1
+                                    WHERE player = "Purple";'''
+                                    )
+                    conn.commit()
                     timestamp = time.time()
                     nivel2=False
                 elif 'Y' in Matriz_competicion_2[-1]:
                     #puntosY+=1
                     c.execute('''UPDATE scores
-                    				SET score = score + 1
-                    				WHERE player = "Orange";'''
-                    				)
+                                    SET score = score + 1
+                                    WHERE player = "Orange";'''
+                                    )
+                    conn.commit()
                     timestamp = time.time()
                     nivel2=False
 
@@ -1866,18 +1867,20 @@ else:
                 if 'P' in Matriz_competicion_3[-1]:
                     #puntosP+=1
                     c.execute('''UPDATE scores
-                    				SET score = score + 1
-                    				WHERE player = "Purple";'''
-                    				)
-                    				
+                                    SET score = score + 1
+                                    WHERE player = "Purple";'''
+                                    )
+                    conn.commit()
+                                    
                     timestamp = time.time()
                     nivel3=False
                 elif 'Y' in Matriz_competicion_3[-1]:
                     #puntosY+=1
                     c.execute('''UPDATE scores
-                    				SET score = score + 1
-                    				WHERE player = "Orange";'''
-                    				)
+                                    SET score = score + 1
+                                    WHERE player = "Orange";'''
+                                    )
+                    conn.commit()
                     timestamp = time.time()
                     nivel3=False
 
@@ -2007,13 +2010,15 @@ else:
 
                 #Verificamos si el jugador ganó la partida.
                 if 'P' in Matriz_competicion_4[-1]:
-                	puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"')
-                	PuntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"')
+                    puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
+                    puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
+
                     #puntosP+=1
                     c.execute('''UPDATE scores
-                    				SET score = score + 1
-                    				WHERE player = "Purple";'''
-                    				)
+                                    SET score = score + 1
+                                    WHERE player = "Purple";'''
+                                    )
+                    conn.commit()
                     try:
                         pygame.quit()
                     except:
@@ -2024,13 +2029,15 @@ else:
                         else:
                             print('Draw!')
                 elif 'Y' in Matriz_competicion_4[-1]:
-                	puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"')
-                	PuntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"')
+                    puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
+                    puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
+
                     #puntosY+=1
                     c.execute('''UPDATE scores
-                    				SET score = score + 1
-                    				WHERE player = "Orange";'''
-                    				)
+                                    SET score = score + 1
+                                    WHERE player = "Orange";'''
+                                    )
+                    conn.commit()
                     try:
                         pygame.quit()
                     except:
@@ -2042,13 +2049,15 @@ else:
                             print('Draw!')
                 for row in Matriz_competicion_4:
                     if row[-1]=='P':
-                        puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"')
-                		PuntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"')
-                    	#puntosP+=1
-                    	c.execute('''UPDATE scores
-                    					SET score = score + 1
-                    					WHERE player = "Purple";'''
-                    					)
+                        puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
+                        puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
+
+                        #puntosP+=1
+                        c.execute('''UPDATE scores
+                                        SET score = score + 1
+                                        WHERE player = "Purple";'''
+                                        )
+                        conn.commit()
                         try:
                             pygame.quit()
                         except:
@@ -2059,13 +2068,15 @@ else:
                             else:
                                 print('Draw!')
                     elif row[-1]=='Y':
-                        puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"')
-                		PuntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"')
-                    	#puntosY+=1
-                    	c.execute('''UPDATE scores
-                    					SET score = score + 1
-                    					WHERE player = "Orange";'''
-                    					)
+                        puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
+                        puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
+
+                        #puntosY+=1
+                        c.execute('''UPDATE scores
+                                        SET score = score + 1
+                                        WHERE player = "Orange";'''
+                                        )
+                        conn.commit()
                         try:
                             pygame.quit()
                         except:
@@ -2085,8 +2096,9 @@ else:
                 try:
                     pygame.display.flip()
                 except:
-                	puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"')
-                	PuntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"')
+                    puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
+                    puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
+
                     if puntosP>puntosY:
                         print('Purple wins!')
                     elif puntosP<puntosY:
