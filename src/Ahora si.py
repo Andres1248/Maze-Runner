@@ -35,8 +35,8 @@ duracion_congelado = 5
 
 
 modo = ''
-while modo.lower()!= 'simple' and modo.lower()!='automático' and modo.lower()!='aventura' and modo.lower()!='competición':
-    modo = input('Seleccione el modo en que desea jugar (simple/automático/aventura/competición): ')
+while modo.lower()!='automático' and modo.lower()!='aventura' and modo.lower()!='competición':
+    modo = input('Seleccione el modo en que desea jugar (automático/aventura/competición): ')
 
 
 
