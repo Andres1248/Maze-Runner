@@ -35,15 +35,15 @@ duracion_congelado = 5
 
 
 modo = ''
-while modo.lower()!='automático' and modo.lower()!='aventura' and modo.lower()!='competición':
-    modo = input('Seleccione el modo en que desea jugar (automático/aventura/competición): ')
+while modo.lower()!='automatic' and modo.lower()!='adventure' and modo.lower()!='competition':
+    modo = input('Which mode would you like to play (automatic/adventure/competition): ')
 
 
 
 
 ambiente = ''
-while ambiente.lower()!='hielo' and ambiente.lower()!='fuego':
-    ambiente = input('¿En cuál ambiente desea jugar (Fuego/Hielo)? ')
+while ambiente.lower()!='ice' and ambiente.lower()!='fire' and ambiente.lower()!='space':
+    ambiente = input('In which environment would you like to play (Space/Fire/Ice)? ')
 
 
 def esta_tocando(Prow, Pcolumn, Brow, Bcolumn):
@@ -928,10 +928,12 @@ else:
     font = pygame.font.Font(None, 30)
     #ubicación del archivo que se usa en el fondo
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    if ambiente.lower()=='fuego':
+    if ambiente.lower()=='fire':
         fondo_path = os.path.join(script_dir, "..", "Images", 'Arenal_at_night.jpg')
-    else:
+    elif ambiente.lower()=='ice':
         fondo_path = os.path.join(script_dir, "..", "Images", 'K2.jpg')
+    else:
+    	fondo_path = os.path.join(script_dir, "..", "Images", 'supernova.jpg')
 
     fondo = pygame.image.load(fondo_path)
 
@@ -1037,7 +1039,7 @@ else:
                                 Matriz_ejemplo[Prow][Pcolumn+1] = 'P'
                                 Matriz_ejemplo[Prow][Pcolumn] = True
                                 Pcolumn += 1
-        elif modo.lower() == 'automático':
+        elif modo.lower() == 'automatic':
 
             if Resuelto:
                                     for y in range(len(Resuelto)):
@@ -1127,7 +1129,7 @@ else:
 
 
 
-        elif modo.lower()=='aventura':
+        elif modo.lower()=='adventure':
             #Nivel 1
             if nivel1:
                 
@@ -1538,7 +1540,7 @@ else:
 
 
 
-        elif modo.lower()=='competición':
+        elif modo.lower()=='competition':
             #Nivel 1
             if nivel1:
 
