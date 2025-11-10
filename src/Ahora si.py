@@ -931,9 +931,9 @@ else:
     #ubicación del archivo que se usa en el fondo
     script_dir = os.path.dirname(os.path.realpath(__file__))
     if ambiente.lower()=='fuego':
-        fondo_path = os.path.join(script_dir, "Imágenes", 'Arenal_at_night.jpg')
+        fondo_path = os.path.join(script_dir, "..", "Images", 'Arenal_at_night.jpg')
     else:
-        fondo_path = os.path.join(script_dir, "Imágenes", 'K2.jpg')
+        fondo_path = os.path.join(script_dir, "..", "Images", 'K2.jpg')
 
     fondo = pygame.image.load(fondo_path)
 
