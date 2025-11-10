@@ -1625,6 +1625,8 @@ else:
                 #Verificamos si han pasado 5 minutos.
                 if time.time()-timestamp>=300:
                     pygame.quit()
+                    c.execute('DELETE FROM scores')
+                    conn.commit()
                     
 
 
@@ -1759,6 +1761,8 @@ else:
                 #Verificamos si han pasado 5 minutos.
                 if time.time()-timestamp>=300:
                     pygame.quit()
+                    c.execute('DELETE FROM scores')
+                    conn.commit()
                     
 
 
@@ -1831,6 +1835,8 @@ else:
                     print("¡Perdieron!")
                     pygame.quit()
                     exit()
+                    c.execute('DELETE FROM scores')
+                    conn.commit()
 
                 for y in range(len(Matriz_competicion_3)):
                     row = Matriz_competicion_3[y]
@@ -1899,6 +1905,8 @@ else:
                 #Verificamos si han pasado 5 minutos.
                 if time.time()-timestamp>=300:
                     pygame.quit()
+                    c.execute('DELETE FROM scores')
+                    conn.commit()
                     
 
 
@@ -1976,6 +1984,8 @@ else:
                     print("¡Perdieron!")
                     pygame.quit()
                     exit()
+                    c.execute('DELETE FROM scores')
+                    conn.commit()
 
                 for y in range(len(Matriz_competicion_4)):
                     row = Matriz_competicion_4[y]
@@ -2010,15 +2020,18 @@ else:
 
                 #Verificamos si el jugador ganó la partida.
                 if 'P' in Matriz_competicion_4[-1]:
-                    puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
-                    puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
-
                     #puntosP+=1
                     c.execute('''UPDATE scores
                                     SET score = score + 1
                                     WHERE player = "Purple";'''
                                     )
                     conn.commit()
+                    puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
+                    puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
+                    c.execute('DELETE FROM scores')
+                    conn.commit()
+
+                    
                     try:
                         pygame.quit()
                     except:
@@ -2029,15 +2042,18 @@ else:
                         else:
                             print('Draw!')
                 elif 'Y' in Matriz_competicion_4[-1]:
-                    puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
-                    puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
-
                     #puntosY+=1
                     c.execute('''UPDATE scores
                                     SET score = score + 1
                                     WHERE player = "Orange";'''
                                     )
                     conn.commit()
+                    puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
+                    puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
+                    c.execute('DELETE FROM scores')
+                    conn.commit()
+
+                    
                     try:
                         pygame.quit()
                     except:
@@ -2049,15 +2065,18 @@ else:
                             print('Draw!')
                 for row in Matriz_competicion_4:
                     if row[-1]=='P':
-                        puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
-                        puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
-
                         #puntosP+=1
                         c.execute('''UPDATE scores
                                         SET score = score + 1
                                         WHERE player = "Purple";'''
                                         )
                         conn.commit()
+                        puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
+                        puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
+                        c.execute('DELETE FROM scores')
+                        conn.commit()
+
+                        
                         try:
                             pygame.quit()
                         except:
@@ -2068,15 +2087,18 @@ else:
                             else:
                                 print('Draw!')
                     elif row[-1]=='Y':
-                        puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
-                        puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
-
                         #puntosY+=1
                         c.execute('''UPDATE scores
                                         SET score = score + 1
                                         WHERE player = "Orange";'''
                                         )
                         conn.commit()
+                        puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
+                        puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
+                        c.execute('DELETE FROM scores')
+                        conn.commit()
+
+                        
                         try:
                             pygame.quit()
                         except:
@@ -2091,13 +2113,17 @@ else:
                 #Verificamos si han pasado 5 minutos.
                 if time.time()-timestamp>=300:
                     pygame.quit()
+                    c.execute('DELETE FROM scores')
+                    conn.commit()
                     
 
                 try:
                     pygame.display.flip()
                 except:
+                    '''
                     puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"').fetchone()[0]
                     puntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"').fetchone()[0]
+                    c.execute('DELETE FROM scores')'''
 
                     if puntosP>puntosY:
                         print('Purple wins!')
