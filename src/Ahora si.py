@@ -15,6 +15,7 @@ import os
 import pygame
 from pygame import FULLSCREEN
 import sys
+import sqlite3
 
 
 nivel1=True
@@ -1541,6 +1542,22 @@ else:
 
 
         elif modo.lower()=='competition':
+        
+        	conn = sqlite3.connect('scores.db')
+        	c = conn.cursor()
+        	c.execute('''CREATE TABLE IF NOT EXISTS scores (
+        					id INTEGER PRIMARY KEY,
+        					player TEXT NOT NULL,
+        					score INTEGER NOT NULL
+        					);''')
+        	players = [
+        				('Purple', 0),
+        				('Orange', 0)
+        				]
+        	c.executemany('INSERT INTO scores (player, score) VALUES (?, ?)', players)
+        	
+        	
+        
             #Nivel 1
             if nivel1:
 
@@ -1576,11 +1593,21 @@ else:
 
                 #Verificamos si el jugador ganó la partida.
                 if 'P' in Matriz_competicion_1[-1]:
-                    puntosP+=1
+                    #puntosP+=1
+                    c.execute('''UPDATE scores
+                    				SET score = score + 1
+                    				WHERE player = "Purple";'''
+                    				)
+                    
                     timestamp = time.time()
                     nivel1=False
                 elif 'Y' in Matriz_competicion_1[-1]:
-                    puntosY+=1
+                    #puntosY+=1
+                    c.execute('''UPDATE scores
+                    				SET score = score + 1
+                    				WHERE player = "Orange";'''
+                    				)
+                    
                     timestamp = time.time()
                     nivel1=False
 
@@ -1701,11 +1728,19 @@ else:
 
                 #Verificamos si el jugador ganó la partida.
                 if 'P' in Matriz_competicion_2[-1]:
-                    puntosP+=1
+                    #puntosP+=1
+                    c.execute('''UPDATE scores
+                    				SET score = score + 1
+                    				WHERE player = "Purple";'''
+                    				)
                     timestamp = time.time()
                     nivel2=False
                 elif 'Y' in Matriz_competicion_2[-1]:
-                    puntosY+=1
+                    #puntosY+=1
+                    c.execute('''UPDATE scores
+                    				SET score = score + 1
+                    				WHERE player = "Orange";'''
+                    				)
                     timestamp = time.time()
                     nivel2=False
 
@@ -1829,11 +1864,20 @@ else:
 
                 #Verificamos si el jugador ganó la partida.
                 if 'P' in Matriz_competicion_3[-1]:
-                    puntosP+=1
+                    #puntosP+=1
+                    c.execute('''UPDATE scores
+                    				SET score = score + 1
+                    				WHERE player = "Purple";'''
+                    				)
+                    				
                     timestamp = time.time()
                     nivel3=False
                 elif 'Y' in Matriz_competicion_3[-1]:
-                    puntosY+=1
+                    #puntosY+=1
+                    c.execute('''UPDATE scores
+                    				SET score = score + 1
+                    				WHERE player = "Orange";'''
+                    				)
                     timestamp = time.time()
                     nivel3=False
 
@@ -1963,50 +2007,74 @@ else:
 
                 #Verificamos si el jugador ganó la partida.
                 if 'P' in Matriz_competicion_4[-1]:
-                    puntosP+=1
+                	puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"')
+                	PuntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"')
+                    #puntosP+=1
+                    c.execute('''UPDATE scores
+                    				SET score = score + 1
+                    				WHERE player = "Purple";'''
+                    				)
                     try:
                         pygame.quit()
                     except:
                         if puntosP>puntosY:
-                            print('Jugador morado gana.')
+                            print('Purple wins!')
                         elif puntosP<puntosY:
-                            print('Jugador amarillo gana.')
+                            print('Orange wins!')
                         else:
-                            print('Empate.')
+                            print('Draw!')
                 elif 'Y' in Matriz_competicion_4[-1]:
-                    puntosY+=1
+                	puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"')
+                	PuntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"')
+                    #puntosY+=1
+                    c.execute('''UPDATE scores
+                    				SET score = score + 1
+                    				WHERE player = "Orange";'''
+                    				)
                     try:
                         pygame.quit()
                     except:
                         if puntosP>puntosY:
-                            print('Jugador morado gana.')
+                            print('Purple wins!')
                         elif puntosP<puntosY:
-                            print('Jugador amarillo gana.')
+                            print('Orange wins!')
                         else:
-                            print('Empate.')
+                            print('Draw!')
                 for row in Matriz_competicion_4:
                     if row[-1]=='P':
-                        puntosP+=1
+                        puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"')
+                		PuntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"')
+                    	#puntosP+=1
+                    	c.execute('''UPDATE scores
+                    					SET score = score + 1
+                    					WHERE player = "Purple";'''
+                    					)
                         try:
                             pygame.quit()
                         except:
                             if puntosP>puntosY:
-                                print('Jugador morado gana.')
+                                print('Purple wins!')
                             elif puntosP<puntosY:
-                                print('Jugador amarillo gana.')
+                                print('Orange wins!')
                             else:
-                                print('Empate.')
+                                print('Draw!')
                     elif row[-1]=='Y':
-                        puntosY+=1
+                        puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"')
+                		PuntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"')
+                    	#puntosY+=1
+                    	c.execute('''UPDATE scores
+                    					SET score = score + 1
+                    					WHERE player = "Orange";'''
+                    					)
                         try:
                             pygame.quit()
                         except:
                             if puntosP>puntosY:
-                                print('Jugador morado gana.')
+                                print('Purple wins!')
                             elif puntosP<puntosY:
-                                print('Jugador amarillo gana.')
+                                print('Orange wins!')
                             else:
-                                print('Empate.')
+                                print('Draw!')
 
 
                 #Verificamos si han pasado 5 minutos.
@@ -2017,12 +2085,14 @@ else:
                 try:
                     pygame.display.flip()
                 except:
+                	puntosP = c.execute('SELECT score FROM scores WHERE player = "Purple"')
+                	PuntosY = c.execute('SELECT score FROM scores WHERE player = "Orange"')
                     if puntosP>puntosY:
-                        print('Jugador morado gana.')
+                        print('Purple wins!')
                     elif puntosP<puntosY:
-                        print('Jugador amarillo gana.')
+                        print('Orange wins!')
                     else:
-                        print('Empate.')   
+                        print('Draw!')   
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         pygame.quit()
